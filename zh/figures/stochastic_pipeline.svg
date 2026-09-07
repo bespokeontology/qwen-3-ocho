@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 760" font-family="Helvetica,Arial,sans-serif">
+  <title>随机场流水线</title>
+  <rect x="0" y="0" width="560" height="760" fill="white"/>
+  <g font-size="13" fill="#222">
+    <rect x="150" y="20" width="260" height="56" fill="#eee" stroke="#555" stroke-width="2"/>
+    <text x="280" y="45" text-anchor="middle" font-weight="bold">常驻受条件状态</text>
+    <text x="280" y="63" text-anchor="middle">一个已灌注父状态（两个层级）</text>
+    <path d="M 280 76 L 280 104" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="290" y="95" font-size="11">分叉（状态复制，毫秒级）</text>
+    <g fill="#f2e8d5" stroke="#8a6d3b">
+      <rect x="60" y="104" width="90" height="40"/><rect x="165" y="104" width="90" height="40"/>
+      <rect x="270" y="104" width="90" height="40"/><rect x="375" y="104" width="90" height="40"/>
+    </g>
+    <text x="105" y="128" text-anchor="middle" font-size="11">分支 0</text>
+    <text x="210" y="128" text-anchor="middle" font-size="11">分支 1</text>
+    <text x="315" y="128" text-anchor="middle" font-size="11">…</text>
+    <text x="420" y="128" text-anchor="middle" font-size="11">分支 M−1</text>
+    <path d="M 280 144 L 280 172" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="290" y="163" font-size="11">确定性 RNG（seed, branch, step, lane）</text>
+    <rect x="150" y="172" width="260" height="40" fill="#eee" stroke="#555" stroke-width="2"/>
+    <text x="280" y="196" text-anchor="middle" font-weight="bold">Kolmogorov 场推进</text>
+    <path d="M 280 212 L 280 240" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="290" y="231" font-size="11">击杀硬币 + 权重补偿</text>
+    <rect x="150" y="240" width="260" height="40" fill="#eee" stroke="#555" stroke-width="2"/>
+    <text x="280" y="264" text-anchor="middle" font-weight="bold">生存掩码 / 压缩</text>
+    <path d="M 280 280 L 280 308" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="290" y="299" font-size="11">逐步观测量累加</text>
+    <rect x="150" y="308" width="260" height="40" fill="#eee" stroke="#555" stroke-width="2"/>
+    <text x="280" y="332" text-anchor="middle" font-weight="bold">观测量求值</text>
+    <path d="M 280 348 L 280 376" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <rect x="150" y="376" width="260" height="40" fill="#dcefe3" stroke="#3b7a4f" stroke-width="2"/>
+    <text x="280" y="400" text-anchor="middle" font-weight="bold">Dumitrescu 归约</text>
+    <path d="M 280 416 L 280 444" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <rect x="150" y="444" width="260" height="40" fill="#eee" stroke="#555" stroke-width="2"/>
+    <text x="280" y="468" text-anchor="middle" font-weight="bold">期望 / 积分 / 分布 / 渲染</text>
+    <path d="M 280 484 L 280 512" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="290" y="503" font-size="11">N、Σw、Σw²、Σwf、Σwf²、ESS</text>
+    <rect x="180" y="512" width="200" height="36" fill="#ddd" stroke="#555" stroke-width="2"/>
+    <text x="280" y="534" text-anchor="middle" font-weight="bold">小结果返回主机</text>
+    <text x="280" y="600" text-anchor="middle" font-size="12" fill="#555">循环回推进步，直至停止规则；</text>
+    <text x="280" y="620" text-anchor="middle" font-size="12" fill="#555">CPU 从不逐分支迭代</text>
+    <defs>
+      <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="#666"/>
+      </marker>
+    </defs>
+  </g>
+</svg>

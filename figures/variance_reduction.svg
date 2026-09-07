@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 340" font-family="Helvetica,Arial,sans-serif">
+  <title>Variance reduction</title>
+  <rect x="0" y="0" width="560" height="340" fill="white"/>
+  <g fill="#222" font-size="12">
+    <text x="30" y="30" font-weight="bold" font-size="14">Estimator absolute error at equal wall time (log scale)</text>
+    <line x1="100" y1="60" x2="100" y2="280" stroke="#555" stroke-width="1.5"/>
+    <line x1="100" y1="280" x2="530" y2="280" stroke="#555" stroke-width="1.5"/>
+    <text x="50" y="284" font-size="10">1e-7</text>
+    <text x="50" y="224" font-size="10">1e-6</text>
+    <text x="50" y="164" font-size="10">1e-5</text>
+    <text x="50" y="104" font-size="10">1e-4</text>
+    <line x1="100" y1="220" x2="530" y2="220" stroke="#ddd"/>
+    <line x1="100" y1="160" x2="530" y2="160" stroke="#ddd"/>
+    <line x1="100" y1="100" x2="530" y2="100" stroke="#ddd"/>
+    <!-- ordinary MC: 3.4e-4 -> y = 280 - (log10(3.4e-4)+7)*60 = 280 - 3.4685*60 = 71.9 -->
+    <rect x="140" y="72" width="130" height="208" fill="#8a6d3b"/>
+    <text x="205" y="62" text-anchor="middle" font-weight="bold">ordinary MC</text>
+    <text x="205" y="296" text-anchor="middle" font-size="10">3.4e-4 (N=1,048,576)</text>
+    <!-- stratified: 1.8e-6 -> y = 280 - (log10(1.8e-6)+7)*60 = 280 - 1.2553*60 = 204.7 -->
+    <rect x="330" y="205" width="130" height="75" fill="#3b7a4f"/>
+    <text x="395" y="195" text-anchor="middle" font-weight="bold">stratified S=64</text>
+    <text x="395" y="296" text-anchor="middle" font-size="10">1.8e-6 (N=1,048,576)</text>
+    <text x="315" y="330" text-anchor="middle" font-size="11" fill="#3b7a4f">~188x lower error at the compared wall time</text>
+    <text x="315" y="348" text-anchor="middle" font-size="10" fill="#555">E[X²], X~U(0,1), analytic 1/3; receipt VARIANCE_REDUCTION_RECEIPT_20260907.md</text>
+  </g>
+</svg>

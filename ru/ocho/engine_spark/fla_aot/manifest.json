@@ -1,0 +1,4321 @@
+{
+ "2048": [
+  {
+   "fn": "chunk_local_cumsum_scalar_kernel",
+   "entry": "chunk_local_cumsum_scalar_kernel",
+   "num_warps": 1,
+   "shared": 0,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 6,
+   "grid": [
+    32,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "s",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 1.4426950216
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 2048
+    },
+    {
+     "name": "B",
+     "kind": "constexpr",
+     "value": 1
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "REVERSE",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HAS_SCALE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HEAD_FIRST",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "015981fd043a42de0a84fbdc9952e972bebef799718d26336d40491f64e7dd0d",
+   "cubin": "chunk_local_cumsum_scalar_kernel_015981fd043a.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "entry": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "num_warps": 1,
+   "shared": 9216,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 7,
+   "grid": [
+    32,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 2048
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BC",
+     "kind": "constexpr",
+     "value": 16
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a97d0e50caa12f472fb0ed988658805623aace68003ebe906d56be43ba7ce152",
+   "cubin": "chunk_gated_delta_rule_fwd_kkt_solve_kernel_a97d0e50caa1.cubin"
+  },
+  {
+   "fn": "recompute_w_u_fwd_kernel",
+   "entry": "recompute_w_u_fwd_kernel",
+   "num_warps": 8,
+   "shared": 28672,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    32,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "u",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 2048
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "6ebd0c04cb2ee8b99a35a3083a2047a245c5949101022ee7b4ec0ba0db0ba1df",
+   "cubin": "recompute_w_u_fwd_kernel_6ebd0c04cb2e.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "entry": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "num_warps": 2,
+   "shared": 16384,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 11,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 2,
+    "num_ctas": 1,
+    "num_stages": 1
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v_new",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "gk",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h0",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "ht",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_offsets",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 2048
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 32
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_GK",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "USE_INITIAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STORE_FINAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "SAVE_NEW_VALUE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a8224ca22210e525948e4e562839740a4fa31e631adbc1287502e25e54b092a2",
+   "cubin": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64_a8224ca22210.cubin"
+  },
+  {
+   "fn": "chunk_fwd_kernel_o",
+   "entry": "chunk_fwd_kernel_o",
+   "num_warps": 8,
+   "shared": 65536,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    32,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "q",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "g_gamma",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 0.08838834764831843
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 2048
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_G_GAMMA",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "fd65cef187c8fcf4622f4e7bd1012a600153c26ea9af31f2e215c130b6d88876",
+   "cubin": "chunk_fwd_kernel_o_fd65cef187c8.cubin"
+  }
+ ],
+ "1893": [
+  {
+   "fn": "chunk_local_cumsum_scalar_kernel",
+   "entry": "chunk_local_cumsum_scalar_kernel",
+   "num_warps": 1,
+   "shared": 0,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 6,
+   "grid": [
+    30,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "s",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 1.4426950216
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 1893
+    },
+    {
+     "name": "B",
+     "kind": "constexpr",
+     "value": 1
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "REVERSE",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HAS_SCALE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HEAD_FIRST",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "015981fd043a42de0a84fbdc9952e972bebef799718d26336d40491f64e7dd0d",
+   "cubin": "chunk_local_cumsum_scalar_kernel_015981fd043a.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "entry": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "num_warps": 1,
+   "shared": 9216,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 7,
+   "grid": [
+    30,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 1893
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BC",
+     "kind": "constexpr",
+     "value": 16
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a97d0e50caa12f472fb0ed988658805623aace68003ebe906d56be43ba7ce152",
+   "cubin": "chunk_gated_delta_rule_fwd_kkt_solve_kernel_a97d0e50caa1.cubin"
+  },
+  {
+   "fn": "recompute_w_u_fwd_kernel",
+   "entry": "recompute_w_u_fwd_kernel",
+   "num_warps": 8,
+   "shared": 28672,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    30,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "u",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 1893
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "6ebd0c04cb2ee8b99a35a3083a2047a245c5949101022ee7b4ec0ba0db0ba1df",
+   "cubin": "recompute_w_u_fwd_kernel_6ebd0c04cb2e.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "entry": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "num_warps": 2,
+   "shared": 16384,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 11,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 2,
+    "num_ctas": 1,
+    "num_stages": 1
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v_new",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "gk",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h0",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "ht",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_offsets",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 1893
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 32
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_GK",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "USE_INITIAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STORE_FINAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "SAVE_NEW_VALUE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a8224ca22210e525948e4e562839740a4fa31e631adbc1287502e25e54b092a2",
+   "cubin": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64_a8224ca22210.cubin"
+  },
+  {
+   "fn": "chunk_fwd_kernel_o",
+   "entry": "chunk_fwd_kernel_o",
+   "num_warps": 8,
+   "shared": 65536,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    30,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "q",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "g_gamma",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 0.08838834764831843
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 1893
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_G_GAMMA",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "fd65cef187c8fcf4622f4e7bd1012a600153c26ea9af31f2e215c130b6d88876",
+   "cubin": "chunk_fwd_kernel_o_fd65cef187c8.cubin"
+  }
+ ],
+ "256": [
+  {
+   "fn": "chunk_local_cumsum_scalar_kernel",
+   "entry": "chunk_local_cumsum_scalar_kernel",
+   "num_warps": 1,
+   "shared": 0,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 6,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "s",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 1.4426950216
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 256
+    },
+    {
+     "name": "B",
+     "kind": "constexpr",
+     "value": 1
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "REVERSE",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HAS_SCALE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HEAD_FIRST",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "015981fd043a42de0a84fbdc9952e972bebef799718d26336d40491f64e7dd0d",
+   "cubin": "chunk_local_cumsum_scalar_kernel_015981fd043a.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "entry": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "num_warps": 1,
+   "shared": 9216,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 7,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 256
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BC",
+     "kind": "constexpr",
+     "value": 16
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a97d0e50caa12f472fb0ed988658805623aace68003ebe906d56be43ba7ce152",
+   "cubin": "chunk_gated_delta_rule_fwd_kkt_solve_kernel_a97d0e50caa1.cubin"
+  },
+  {
+   "fn": "recompute_w_u_fwd_kernel",
+   "entry": "recompute_w_u_fwd_kernel",
+   "num_warps": 8,
+   "shared": 28672,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "u",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 256
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "6ebd0c04cb2ee8b99a35a3083a2047a245c5949101022ee7b4ec0ba0db0ba1df",
+   "cubin": "recompute_w_u_fwd_kernel_6ebd0c04cb2e.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "entry": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "num_warps": 2,
+   "shared": 16384,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 11,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 2,
+    "num_ctas": 1,
+    "num_stages": 1
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v_new",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "gk",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h0",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "ht",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_offsets",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 256
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 32
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_GK",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "USE_INITIAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STORE_FINAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "SAVE_NEW_VALUE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a8224ca22210e525948e4e562839740a4fa31e631adbc1287502e25e54b092a2",
+   "cubin": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64_a8224ca22210.cubin"
+  },
+  {
+   "fn": "chunk_fwd_kernel_o",
+   "entry": "chunk_fwd_kernel_o",
+   "num_warps": 8,
+   "shared": 65536,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "q",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "g_gamma",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 0.08838834764831843
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 256
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_G_GAMMA",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "fd65cef187c8fcf4622f4e7bd1012a600153c26ea9af31f2e215c130b6d88876",
+   "cubin": "chunk_fwd_kernel_o_fd65cef187c8.cubin"
+  }
+ ],
+ "125": [
+  {
+   "fn": "chunk_local_cumsum_scalar_kernel",
+   "entry": "chunk_local_cumsum_scalar_kernel",
+   "num_warps": 1,
+   "shared": 0,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 6,
+   "grid": [
+    2,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "s",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 1.4426950216
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 125
+    },
+    {
+     "name": "B",
+     "kind": "constexpr",
+     "value": 1
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "REVERSE",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HAS_SCALE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HEAD_FIRST",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "015981fd043a42de0a84fbdc9952e972bebef799718d26336d40491f64e7dd0d",
+   "cubin": "chunk_local_cumsum_scalar_kernel_015981fd043a.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "entry": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "num_warps": 1,
+   "shared": 9216,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 7,
+   "grid": [
+    2,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 125
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BC",
+     "kind": "constexpr",
+     "value": 16
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a97d0e50caa12f472fb0ed988658805623aace68003ebe906d56be43ba7ce152",
+   "cubin": "chunk_gated_delta_rule_fwd_kkt_solve_kernel_a97d0e50caa1.cubin"
+  },
+  {
+   "fn": "recompute_w_u_fwd_kernel",
+   "entry": "recompute_w_u_fwd_kernel",
+   "num_warps": 8,
+   "shared": 28672,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    2,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "u",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 125
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "6ebd0c04cb2ee8b99a35a3083a2047a245c5949101022ee7b4ec0ba0db0ba1df",
+   "cubin": "recompute_w_u_fwd_kernel_6ebd0c04cb2e.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "entry": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "num_warps": 2,
+   "shared": 16384,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 11,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 2,
+    "num_ctas": 1,
+    "num_stages": 1
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v_new",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "gk",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h0",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "ht",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_offsets",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 125
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 32
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_GK",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "USE_INITIAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STORE_FINAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "SAVE_NEW_VALUE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a8224ca22210e525948e4e562839740a4fa31e631adbc1287502e25e54b092a2",
+   "cubin": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64_a8224ca22210.cubin"
+  },
+  {
+   "fn": "chunk_fwd_kernel_o",
+   "entry": "chunk_fwd_kernel_o",
+   "num_warps": 8,
+   "shared": 65536,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    2,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "q",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "g_gamma",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 0.08838834764831843
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 125
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_G_GAMMA",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "fd65cef187c8fcf4622f4e7bd1012a600153c26ea9af31f2e215c130b6d88876",
+   "cubin": "chunk_fwd_kernel_o_fd65cef187c8.cubin"
+  }
+ ],
+ "64": [
+  {
+   "fn": "chunk_local_cumsum_scalar_kernel",
+   "entry": "chunk_local_cumsum_scalar_kernel",
+   "num_warps": 1,
+   "shared": 0,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 6,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "s",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 1.4426950216
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 64
+    },
+    {
+     "name": "B",
+     "kind": "constexpr",
+     "value": 1
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "REVERSE",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HAS_SCALE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HEAD_FIRST",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "015981fd043a42de0a84fbdc9952e972bebef799718d26336d40491f64e7dd0d",
+   "cubin": "chunk_local_cumsum_scalar_kernel_015981fd043a.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "entry": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "num_warps": 1,
+   "shared": 9216,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 7,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 64
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BC",
+     "kind": "constexpr",
+     "value": 16
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a97d0e50caa12f472fb0ed988658805623aace68003ebe906d56be43ba7ce152",
+   "cubin": "chunk_gated_delta_rule_fwd_kkt_solve_kernel_a97d0e50caa1.cubin"
+  },
+  {
+   "fn": "recompute_w_u_fwd_kernel",
+   "entry": "recompute_w_u_fwd_kernel",
+   "num_warps": 8,
+   "shared": 28672,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "u",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 64
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "6ebd0c04cb2ee8b99a35a3083a2047a245c5949101022ee7b4ec0ba0db0ba1df",
+   "cubin": "recompute_w_u_fwd_kernel_6ebd0c04cb2e.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "entry": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "num_warps": 2,
+   "shared": 16384,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 11,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 2,
+    "num_ctas": 1,
+    "num_stages": 1
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v_new",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "gk",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h0",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "ht",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_offsets",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 64
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 32
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_GK",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "USE_INITIAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STORE_FINAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "SAVE_NEW_VALUE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a8224ca22210e525948e4e562839740a4fa31e631adbc1287502e25e54b092a2",
+   "cubin": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64_a8224ca22210.cubin"
+  },
+  {
+   "fn": "chunk_fwd_kernel_o",
+   "entry": "chunk_fwd_kernel_o",
+   "num_warps": 8,
+   "shared": 65536,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "q",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "g_gamma",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 0.08838834764831843
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 64
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_G_GAMMA",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "fd65cef187c8fcf4622f4e7bd1012a600153c26ea9af31f2e215c130b6d88876",
+   "cubin": "chunk_fwd_kernel_o_fd65cef187c8.cubin"
+  }
+ ],
+ "32": [
+  {
+   "fn": "chunk_local_cumsum_scalar_kernel",
+   "entry": "chunk_local_cumsum_scalar_kernel",
+   "num_warps": 1,
+   "shared": 0,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 6,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "s",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 1.4426950216
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 32
+    },
+    {
+     "name": "B",
+     "kind": "constexpr",
+     "value": 1
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "REVERSE",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HAS_SCALE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HEAD_FIRST",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "015981fd043a42de0a84fbdc9952e972bebef799718d26336d40491f64e7dd0d",
+   "cubin": "chunk_local_cumsum_scalar_kernel_015981fd043a.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "entry": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "num_warps": 1,
+   "shared": 9216,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 7,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 32
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BC",
+     "kind": "constexpr",
+     "value": 16
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a97d0e50caa12f472fb0ed988658805623aace68003ebe906d56be43ba7ce152",
+   "cubin": "chunk_gated_delta_rule_fwd_kkt_solve_kernel_a97d0e50caa1.cubin"
+  },
+  {
+   "fn": "recompute_w_u_fwd_kernel",
+   "entry": "recompute_w_u_fwd_kernel",
+   "num_warps": 8,
+   "shared": 28672,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "u",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 32
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "6ebd0c04cb2ee8b99a35a3083a2047a245c5949101022ee7b4ec0ba0db0ba1df",
+   "cubin": "recompute_w_u_fwd_kernel_6ebd0c04cb2e.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "entry": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "num_warps": 2,
+   "shared": 16384,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 11,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 2,
+    "num_ctas": 1,
+    "num_stages": 1
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v_new",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "gk",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h0",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "ht",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_offsets",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 32
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 32
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_GK",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "USE_INITIAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STORE_FINAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "SAVE_NEW_VALUE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a8224ca22210e525948e4e562839740a4fa31e631adbc1287502e25e54b092a2",
+   "cubin": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64_a8224ca22210.cubin"
+  },
+  {
+   "fn": "chunk_fwd_kernel_o",
+   "entry": "chunk_fwd_kernel_o",
+   "num_warps": 8,
+   "shared": 65536,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "q",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "g_gamma",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 0.08838834764831843
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 32
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_G_GAMMA",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "fd65cef187c8fcf4622f4e7bd1012a600153c26ea9af31f2e215c130b6d88876",
+   "cubin": "chunk_fwd_kernel_o_fd65cef187c8.cubin"
+  }
+ ],
+ "16": [
+  {
+   "fn": "chunk_local_cumsum_scalar_kernel",
+   "entry": "chunk_local_cumsum_scalar_kernel",
+   "num_warps": 1,
+   "shared": 0,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 6,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "s",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 1.4426950216
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 16
+    },
+    {
+     "name": "B",
+     "kind": "constexpr",
+     "value": 1
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "REVERSE",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HAS_SCALE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "HEAD_FIRST",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "015981fd043a42de0a84fbdc9952e972bebef799718d26336d40491f64e7dd0d",
+   "cubin": "chunk_local_cumsum_scalar_kernel_015981fd043a.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "entry": "chunk_gated_delta_rule_fwd_kkt_solve_kernel",
+   "num_warps": 1,
+   "shared": 9216,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 7,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 1,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 16
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BC",
+     "kind": "constexpr",
+     "value": 16
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a97d0e50caa12f472fb0ed988658805623aace68003ebe906d56be43ba7ce152",
+   "cubin": "chunk_gated_delta_rule_fwd_kkt_solve_kernel_a97d0e50caa1.cubin"
+  },
+  {
+   "fn": "recompute_w_u_fwd_kernel",
+   "entry": "recompute_w_u_fwd_kernel",
+   "num_warps": 8,
+   "shared": 28672,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "beta",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "u",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "A",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 16
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "6ebd0c04cb2ee8b99a35a3083a2047a245c5949101022ee7b4ec0ba0db0ba1df",
+   "cubin": "recompute_w_u_fwd_kernel_6ebd0c04cb2e.cubin"
+  },
+  {
+   "fn": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "entry": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+   "num_warps": 2,
+   "shared": 16384,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 11,
+   "grid": [
+    4,
+    48
+   ],
+   "meta": {
+    "num_warps": 2,
+    "num_ctas": 1,
+    "num_stages": 1
+   },
+   "params": [
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "w",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v_new",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "gk",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h0",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "ht",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_offsets",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 16
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 32
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_GK",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "USE_INITIAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STORE_FINAL_STATE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "SAVE_NEW_VALUE",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "a8224ca22210e525948e4e562839740a4fa31e631adbc1287502e25e54b092a2",
+   "cubin": "chunk_gated_delta_rule_fwd_kernel_h_blockdim64_a8224ca22210.cubin"
+  },
+  {
+   "fn": "chunk_fwd_kernel_o",
+   "entry": "chunk_fwd_kernel_o",
+   "num_warps": 8,
+   "shared": 65536,
+   "global_scratch": 0,
+   "profile_scratch": 0,
+   "ptx_params": 10,
+   "grid": [
+    1,
+    1,
+    48
+   ],
+   "meta": {
+    "num_warps": 8,
+    "num_ctas": 1,
+    "num_stages": 3
+   },
+   "params": [
+    {
+     "name": "q",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "k",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "v",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "h",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "g",
+     "kind": "ptr",
+     "sigtype": "*fp32",
+     "value": "torch.float32"
+    },
+    {
+     "name": "g_gamma",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "o",
+     "kind": "ptr",
+     "sigtype": "*bf16",
+     "value": "torch.bfloat16"
+    },
+    {
+     "name": "cu_seqlens",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "chunk_indices",
+     "kind": "constexpr",
+     "value": null
+    },
+    {
+     "name": "scale",
+     "kind": "fp32",
+     "sigtype": "fp32",
+     "value": 0.08838834764831843
+    },
+    {
+     "name": "T",
+     "kind": "int",
+     "sigtype": "i32",
+     "value": 16
+    },
+    {
+     "name": "H",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "HV",
+     "kind": "constexpr",
+     "value": 48
+    },
+    {
+     "name": "K",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "V",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BT",
+     "kind": "constexpr",
+     "value": 64
+    },
+    {
+     "name": "BK",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "BV",
+     "kind": "constexpr",
+     "value": 128
+    },
+    {
+     "name": "USE_G",
+     "kind": "constexpr",
+     "value": true
+    },
+    {
+     "name": "USE_G_GAMMA",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "STATE_V_FIRST",
+     "kind": "constexpr",
+     "value": false
+    },
+    {
+     "name": "IS_VARLEN",
+     "kind": "constexpr",
+     "value": false
+    }
+   ],
+   "hash": "fd65cef187c8fcf4622f4e7bd1012a600153c26ea9af31f2e215c130b6d88876",
+   "cubin": "chunk_fwd_kernel_o_fd65cef187c8.cubin"
+  }
+ ]
+}

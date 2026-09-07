@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software or the engineering report, please cite it as below."
+title: "Qwen3.8-Flash-Next Heterogeneous Engine: resident-state stochastic computation on a two-accelerator appliance"
+type: software
+date-released: 2026-09-07
+version: 0.1.0-rc1
+abstract: >-
+  Engineering record of a two-accelerator (4x MI50 gfx906 + NVIDIA GB10) heterogeneous
+  native-inference appliance and a GPU-native stochastic evaluation engine that treats a
+  language model's resident causal state as a conditioned transition operator: fork, deterministic
+  counter-based RNG, field advance with pruning and compaction, weighted statistical reduction,
+  Monte Carlo validation against analytic integrals, variance reduction, stochastic rendering,
+  and a model-backed conditioned stochastic field.
+keywords:
+  - heterogeneous inference
+  - stochastic computation
+  - Monte Carlo
+  - resident state
+  - CUDA
+  - HIP
+license: MIT

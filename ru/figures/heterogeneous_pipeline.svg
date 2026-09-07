@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" font-family="Helvetica,Arial,sans-serif">
+  <title>Гетерогенный конвейер</title>
+  <rect x="0" y="0" width="760" height="420" fill="white"/>
+  <g font-size="13" fill="#222">
+    <rect x="60" y="30" width="260" height="120" fill="#f2e8d5" stroke="#8a6d3b" stroke-width="2"/>
+    <text x="190" y="55" text-anchor="middle" font-weight="bold">Уровень AMD — 4x MI50 (gfx906)</text>
+    <text x="190" y="78" text-anchor="middle">префиксные слои 0..15</text>
+    <text x="190" y="98" text-anchor="middle">PLE · резидентные арены экспертов (INT8)</text>
+    <text x="190" y="118" text-anchor="middle">состояние: KV, GDN, кольца свёрток, пулы QSA</text>
+    <rect x="440" y="170" width="260" height="120" fill="#e8eef2" stroke="#3b6a8a" stroke-width="2"/>
+    <text x="570" y="195" text-anchor="middle" font-weight="bold">NVIDIA GB10 (sm_121a)</text>
+    <text x="570" y="218" text-anchor="middle">хвостовые слои 16..47</text>
+    <text x="570" y="238" text-anchor="middle">плотные FP8 · маршрутизируемые NVFP4</text>
+    <text x="570" y="258" text-anchor="middle">GDN · гиперсвязи · QSA-индексатор</text>
+    <rect x="60" y="320" width="260" height="80" fill="#f2e8d5" stroke="#8a6d3b" stroke-width="2"/>
+    <text x="190" y="345" text-anchor="middle" font-weight="bold">Уровень AMD — слитая голова</text>
+    <text x="190" y="368" text-anchor="middle">выходные HC · lm_head · argmax</text>
+    <text x="190" y="388" text-anchor="middle">подготовка окна следующего префикса</text>
+    <path d="M 190 150 L 190 170" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="210" y="165" font-size="11">остаток (сеть)</text>
+    <path d="M 440 230 L 320 230 L 320 360" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="340" y="300" font-size="11">остаток (сеть)</text>
+    <path d="M 190 400 L 190 415 L 380 415" stroke="#666" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="230" y="410" font-size="11">token id</text>
+    <defs>
+      <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="#666"/>
+      </marker>
+    </defs>
+  </g>
+</svg>

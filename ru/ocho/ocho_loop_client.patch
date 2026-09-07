@@ -1,0 +1,185 @@
+diff --git a/src/cuda/qf.cu b/src/cuda/qf.cu
+index e00a19e..3ba0bae 100644
+--- a/src/cuda/qf.cu
++++ b/src/cuda/qf.cu
+@@ -5039,6 +5039,25 @@ extern "C" int qf_fork_rows(int M, long P) {
+     }
+     return cudaStreamSynchronize(s) == cudaSuccess ? 0 : -1;
+ }
++// COMMIT (decision/commit loop): copy sibling row r's resident state back into the parent
++// (ctx.*) buffers. Exact reverse of qf_fork_rows - same buffers, src/dst swapped.
++extern "C" int qf_fork_commit_rows(int r, long P) {
++    if (r < 0 || r >= QF_SPEC_MAXT || P < 0) return -1;
++    cudaStream_t s = ctx.s;
++    const size_t sS = (size_t)GDN_VH * GDN_KD * GDN_VD;
++    const size_t span = (size_t)qf_maxpos() * KVDIM;
++    for (int il = qf_layer_begin(); il < NLAYER; il++) {
++        if (((il + 1) % 4) != 0) {
++            cudaMemcpyAsync(ctx.gdnS[il], g_gdnS_M[il] + (size_t)r * sS, sS * sizeof(float), cudaMemcpyDeviceToDevice, s);
++            cudaMemcpyAsync(ctx.convring[il], g_convring_M[il] + (size_t)r * 3 * DINN, (size_t)3 * DINN * sizeof(float), cudaMemcpyDeviceToDevice, s);
++        } else if (P > 0) {
++            const size_t nb = (size_t)P * KVDIM * 2;
++            cudaMemcpyAsync(ctx.kc[il], g_kc_M[il] + (size_t)r * span, nb, cudaMemcpyDeviceToDevice, s);
++            cudaMemcpyAsync(ctx.vc[il], g_vc_M[il] + (size_t)r * span, nb, cudaMemcpyDeviceToDevice, s);
++        }
++    }
++    return cudaStreamSynchronize(s) == cudaSuccess ? 0 : -1;
++}
+ // Per-row state signature (fork independence proof): sum of the row's GDN states and conv rings over the
+ // Spark layers plus its KV entries at positions [P-4, P+4). Rows that received identical inputs must have
+ // identical signatures; a row that received a different token must differ; the others must not move.
+diff --git a/src/cuda/qf_moe_client.cpp b/src/cuda/qf_moe_client.cpp
+index 267a69f..c951fb5 100644
+--- a/src/cuda/qf_moe_client.cpp
++++ b/src/cuda/qf_moe_client.cpp
+@@ -105,6 +105,12 @@ extern "C" int qf_amd_region_fork_fd(int fd, int M, long long P) {
+     if (io_all(fd, &h, sizeof h, 0)) return -1;
+     return (h.magic == QFW_MAGIC && h.op == QFW_REGION_FORK) ? 0 : -1;
+ }
++extern "C" int qf_amd_region_commit_fd(int fd, int r, long long P) {
++    QfWireHdr h; h.magic = QFW_MAGIC; h.op = QFW_REGION_COMMIT; h.pos = P; h.token = r; h.nbytes = 0;
++    if (io_all(fd, &h, sizeof h, 1)) return -1;
++    if (io_all(fd, &h, sizeof h, 0)) return -1;
++    return (h.magic == QFW_MAGIC && h.op == QFW_REGION_COMMIT) ? 0 : -1;
++}
+ 
+ // Alternating map: AMD prefix (token ids -> residuals) and AMD head
+ // (residuals -> token ids). Two coarse crossings per token; the reply from the
+diff --git a/src/cuda/qf_moe_wire.h b/src/cuda/qf_moe_wire.h
+index e3105a1..04d65fb 100644
+--- a/src/cuda/qf_moe_wire.h
++++ b/src/cuda/qf_moe_wire.h
+@@ -10,6 +10,7 @@
+                                      // wire; no per-layer traffic.
+ #define QFW_REGION_RESET 9
+ #define QFW_REGION_FORK  16   // token = M rows, pos = P: copy row 0's resident state into rows 1..M-1 (all stages)
++#define QFW_REGION_COMMIT 17 // token = source row r, pos = P: copy row r's resident state into row 0 (all stages) - decision/commit loop
+ // Alternating map (newest receipted): AMD prefix -> Spark tail -> AMD head.
+ #define QFW_PREFIX_M   12   // token ids in  -> M residuals out (AMD layers 0..S-1)
+ #define QFW_BF16       0x100   // op flag: residual payloads on the wire are bf16 (half the bytes); the reply mirrors it
+diff --git a/src/cuda/qf_region_amd.cpp b/src/cuda/qf_region_amd.cpp
+index 6614a32..d770e05 100644
+--- a/src/cuda/qf_region_amd.cpp
++++ b/src/cuda/qf_region_amd.cpp
+@@ -22,6 +22,12 @@ extern "C" int qf_region_amd_fork(int M, long P) {           // copy AMD row 0's
+     if (qf_amd_region_fork_fd(g_fd, M, (long long)P)) { g_state = 0; return -1; }
+     return 0;
+ }
++extern "C" int qf_amd_region_commit_fd(int fd, int r, long long P);
++extern "C" int qf_region_amd_commit(int r, long P) {           // copy AMD row r's state into row 0 (decision/commit loop)
++    if (!qf_region_amd_enabled()) return -1;
++    if (qf_amd_region_commit_fd(g_fd, r, (long long)P)) { g_state = 0; return -1; }
++    return 0;
++}
+ extern "C" int qf_region_amd_reset(void) {
+     if (!qf_region_amd_enabled()) return -1;
+     if (qf_amd_region_reset(g_fd)) { g_state = 0; return -1; }
+diff --git a/src/main.cu b/src/main.cu
+index 9b13e8c..631f72f 100644
+--- a/src/main.cu
++++ b/src/main.cu
+@@ -70,6 +70,8 @@ extern "C" int qf_fork_rows(int M, long P);
+ extern "C" int qf_reqbatch_state_init(int M);   /* one-shot sizing: fork width must be set before the prime */
+ extern "C" int qf_fork_state_sig(int M, long P, double *sig);
+ extern "C" int qf_region_amd_fork(int M, long P);
++extern "C" int qf_region_amd_commit(int r, long P);
++extern "C" int qf_fork_commit_rows(int r, long P);
+ static volatile int g_wd_phase = 0;       // 0 load, 1 prime, 2 decode, 3 done
+ static volatile double g_wd_t0 = 0;
+ static double wd_env(const char *k, double d) { const char *e = getenv(k); return (e && atof(e) > 0) ? atof(e) : d; }
+@@ -375,6 +377,95 @@ static int qf_run_m8(QfModel *model, const char *csv, int max_new) {
+     if (M == 1 && region && getenv("QF_M8_FORK")) {
+         const int Mf = atoi(getenv("QF_M8_FORK")); const int K = getenv("QF_M8_FORK_STEPS") ? atoi(getenv("QF_M8_FORK_STEPS")) : 32;
+         if (Mf < 1 || Mf > 16) { fprintf(stderr, "fork: QF_M8_FORK must be 1..16\n"); return 1; }
++        if (getenv("QF_M8_FORK_LOOP")) {
++            // DECISION/COMMIT LOOP: iterate { render Mf alternatives for K steps; evaluate; choose; commit }.
++            // The chosen row's full state (AMD prefix + Spark tail) becomes the new parent (row 0) on BOTH
++            // boxes; the next iteration re-renders FROM the committed state. The conditional-probability tree
++            // is preserved in the log: every branch's tokens, signatures and scores, and every choice.
++            // Chooser (v1, transparent): exclude early-EOS rows; score = |sigR - median(sigR of survivors)|;
++            // commit the closest-to-median survivor. Row 0 (greedy) is a candidate like any other.
++            const int NIT = getenv("QF_M8_FORK_LOOP_ITERS") ? atoi(getenv("QF_M8_FORK_LOOP_ITERS")) : 4;
++            long P = pos[0]; int last_tok = tok[0];
++            int tokM[16]; long posM[16]; int histM[16][3];
++            for (int r = 0; r < Mf; r++) { histM[r][0] = hist[0][0]; histM[r][1] = hist[0][1]; histM[r][2] = hist[0][2]; }
++            long made = 0;
++            for (int it = 0; it < NIT; it++) {
++                const double tl0 = now_seconds();
++                if (qf_region_amd_fork(Mf, P)) { fprintf(stderr, "loop: AMD fork failed\n"); return 1; }
++                if (qf_fork_rows(Mf, P)) { fprintf(stderr, "loop: Spark fork failed\n"); return 1; }
++                for (int r = 0; r < Mf; r++) { tokM[r] = last_tok; posM[r] = P; }
++                int *outM = (int *)malloc(sizeof(int) * (size_t)Mf * K), outlenM[16];
++                // Chunked render (observation boundaries only): 16-token chunks with a live per-row
++                // preview (ids + artifact count), accumulated into the SAME outM the one-shot call
++                // would produce; the chooser still sees all K tokens. Chunking does not change
++                // semantics - the decoder state advances identically across chunk boundaries.
++                const int CH = (K % 16 == 0) ? 16 : K; const int nch = (K + CH - 1) / CH;
++                int *tmp = (int *)malloc(sizeof(int) * (size_t)Mf * CH);
++                for (int r = 0; r < Mf; r++) outlenM[r] = 0;
++                for (int c = 0; c < nch; c++) {
++                    int ol[16];
++                    if (qf_decode_batch_run_region(model, tokM, posM, histM, Mf, CH, tmp, ol)) { fprintf(stderr, "loop: render chunk %d failed\n", c); return 1; }
++                    // the region decode lays rows out with stride max_new (=CH): copy each row's
++                    // chunk into the K-stride outM layout the chooser and the SIBLING dump read
++                    for (int r = 0; r < Mf; r++)
++                        memcpy(outM + (size_t)r * K + (size_t)c * CH, tmp + (size_t)r * CH, (size_t)ol[r] * sizeof(int));
++                    printf("OCHO it%02d render %d/%d\n", it, (c + 1) * CH, K);
++                    for (int r = 0; r < Mf; r++) {
++                        outlenM[r] += ol[r];
++                        int art = 0;
++                        for (int i = 0; i < ol[r]; i++) if (outM[(size_t)r * K + (size_t)c * CH + i] >= 110000) art++;
++                        printf("  r%d art=%d ids:", r, art);
++                        for (int i = 0; i < ol[r]; i++) printf(" %d", outM[(size_t)r * K + (size_t)c * CH + i]);
++                        printf("\n");
++                    }
++                    fflush(stdout);
++                    for (int r = 0; r < Mf; r++) {
++                        if (ol[r] > 0) tokM[r] = outM[(size_t)r * K + (size_t)c * CH + ol[r] - 1];
++                        posM[r] += ol[r];
++                    }
++                }
++                free(tmp);
++                double s[32];
++                if (qf_fork_state_sig(Mf, P + K, s)) { fprintf(stderr, "loop: sig failed\n"); return 1; }
++                double sigR[16]; int nart[16] = {0}; int eos[16] = {0};
++                for (int r = 0; r < Mf; r++) {
++                    sigR[r] = s[2 * r];
++                    for (int i = 0; i < outlenM[r]; i++) {
++                        int t = outM[(size_t)r * K + i];
++                        if (t == 248046 && i < K / 2) eos[r] = 1;   // early EOS = nearly dead
++                        if (t >= 110000) nart[r]++;                  // mojibake/tail-vocab artifact (beam measurement)
++                    }
++                }
++                double sr[16]; for (int r = 0; r < Mf; r++) sr[r] = sigR[r];
++                for (int a = 0; a < Mf; a++) for (int b = a + 1; b < Mf; b++) if (sr[b] < sr[a]) { double t = sr[a]; sr[a] = sr[b]; sr[b] = t; }
++                double med = sr[Mf / 2];
++                int chosen = 0; long bestscore = 1L << 62;
++                for (int r = 0; r < Mf; r++) {
++                    double d = sigR[r] - med; if (d < 0) d = -d;
++                    // lexicographic: fewest artifacts first (early-EOS = +100), consensus distance second
++                    long sc = ((long)(nart[r] + (eos[r] ? 100 : 0)) << 40) + (long)(d > 1.0e6 ? 1.0e6 : d);
++                    fprintf(stderr, "LOOP it%d row %d: sigR %.1f | dist %.1f | art=%d eos=%d\n", it, r, sigR[r], d, nart[r], eos[r]);
++                    if (sc < bestscore) { bestscore = sc; chosen = r; }
++                }
++                if (qf_fork_commit_rows(chosen, P + K)) { fprintf(stderr, "loop: Spark commit failed\n"); return 1; }
++                if (qf_region_amd_commit(chosen, P + K)) { fprintf(stderr, "loop: AMD commit failed\n"); return 1; }
++                const double tl1 = now_seconds();
++                printf("OCHO it%02d DECISION: selected r%d (art=%d eos=%d); COMMIT\n", it, chosen, nart[chosen], eos[chosen]);
++                fflush(stdout);
++                fprintf(stderr, "LOOP it%d COMMIT row %d (sigR %.1f); render+commit wall %.2f s; parent now pos %ld\n", it, chosen, sigR[chosen], tl1 - tl0, P + K);
++                for (int r = 0; r < Mf; r++) {
++                    printf("=== LOOP it%d SIBLING %d (%d out tok) ===\n", it, r, outlenM[r]);
++                    for (int i = 0; i < outlenM[r]; i++) printf("%d ", outM[(size_t)r * K + i]);
++                    printf("\n");
++                }
++                last_tok = outM[(size_t)chosen * K + outlenM[chosen] - 1];
++                for (int r = 0; r < Mf; r++) { histM[r][0] = histM[chosen][0]; histM[r][1] = histM[chosen][1]; histM[r][2] = histM[chosen][2]; }
++                P += K; made += K;
++                free(outM);
++            }
++            fprintf(stderr, "LOOP END: %d iterations, %ld committed tokens, final parent pos %ld, last token %d\n", NIT, made, P, last_tok);
++            return 0;
++        }
+         const double tf0 = now_seconds();
+         if (qf_region_amd_fork(Mf, pos[0])) { fprintf(stderr, "fork: AMD fork failed\n"); return 1; }
+         const double tf1 = now_seconds();

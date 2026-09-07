@@ -1,0 +1,22 @@
+# Makefile.m8 - gfx906 build of the M=8 routed-expert tier. Include or invoke
+# alongside Makefile.hip4. Requires ROCm hipcc; NOT used for host-check
+# (see ../hostcheck_m8.sh).
+HIPCC   ?= hipcc
+ARCH    ?= gfx906
+HIPFLAGS ?= --offload-arch=$(ARCH) -O3 -std=c++17 -I.
+
+# (qf_moe_handoff is header-only; the serve handler lives in qf_moe_serve.cpp.)
+M8_OBJS = qf_moe_m8_wave64.o qf_moe_4card.o qf_moe_serve.o qf_moe_4card_boot.o
+
+qf_moe_m8_wave64.o: qf_moe_m8_wave64.hip qf_moe_m8_wave64.h qf_nvfp4_wave64.h
+	$(HIPCC) $(HIPFLAGS) -c qf_moe_m8_wave64.hip -o $@
+qf_moe_4card.o: qf_moe_4card.cpp qf_moe_4card.h qf_moe_m8_wave64.h
+	$(HIPCC) $(HIPFLAGS) -c qf_moe_4card.cpp -o $@
+qf_moe_serve.o: qf_moe_serve.cpp qf_moe_handoff.h qf_moe_wire.h qf_moe_4card.h
+	$(HIPCC) $(HIPFLAGS) -c qf_moe_serve.cpp -o $@
+qf_moe_4card_boot.o: qf_moe_4card_boot.cpp qf_moe_handoff.h qf_moe_4card.h
+	$(HIPCC) $(HIPFLAGS) -c qf_moe_4card_boot.cpp -o $@
+
+m8: $(M8_OBJS)
+	@echo "built M=8 routed-expert objects: $(M8_OBJS)"
+.PHONY: m8

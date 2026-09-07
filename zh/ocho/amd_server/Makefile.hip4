@@ -1,0 +1,136 @@
+# Makefile.hip4 - 4x gfx906 (MI50) pipeline backend, wave-4 session 09:
+# persistent-server engine core. wave-2 session 05 base (stage/pipeline +
+# fused NVFP4 kernels + fixed-slot expert cache) + device-resident router
+# (qf_router_wave64.hip) + device-indexed expert kernels + P2P/pinned
+# handoff + budget guard + reset/stats.
+#
+# qwenflash.h ships in this tree (./qwenflash.h); ENGINESRC can point at the
+# engine source tree to override it (-I$(ENGINESRC) wins if earlier).
+#
+#   make -f Makefile.hip4                          # hipcc build (gfx906)
+#   make -f Makefile.hip4 check                    # host-only syntax check (no ROCm)
+#   make -f Makefile.hip4 clean
+#
+# Link with the C engine objects using hipcc as the final linker:
+#   hipcc -o qwenflash4 store.o qf_hip4_stage.o qf_nvfp4_wave64.o \
+#         qf_router_wave64.o qf_expert_slots.o qf_hip4_pipeline.o -pthread
+
+HIPCC     ?= hipcc
+CXX       ?= g++
+# gfx906 baseline only: no gfx90a+ arch features (ROCm 5.7 target).
+GFX       ?= gfx906
+ENGINESRC ?= .
+
+# -fno-gpu-rdc: single-TU kernels, no relocatable device code needed.
+# No -ffast-math: keep numerics identical to the reference build.
+# rocBLAS lm_head path is opt-in (ROCBLAS=1): the target's ROCm 5.7 rocBLAS has
+# no rocblas_gemv_algo_standard, so the default is the custom BF16 GEMV kernel.
+ROCBLAS   ?= 0
+HIPFLAGS := -O3 -std=c++17 --offload-arch=$(GFX) -fno-gpu-rdc \
+            -Wall -Wextra -Wno-unused-parameter
+ifeq ($(ROCBLAS),1)
+HIPFLAGS += -DQF8_ROCBLAS
+endif
+CXXFLAGS := -O2 -std=c++17 -Wall -Wextra -pthread
+CPPFLAGS := -I. -I$(ENGINESRC)
+
+OBJS := qf_hip4_stage.o qf_nvfp4_wave64.o qf_router_wave64.o \
+        qf_expert_slots.o qf_hip4_pipeline.o qf8_gemv.o qf8_gemv_m.o qf8_hc.o \
+        qf8_gdn.o qf8_qsa.o qf8_ple.o qf8_layer.o qf8_moe_fp8.o qf8_moe_i8.o qf8_dense_i8.o qf8_gdn_chunk.o \
+        qf_moe_m8_wave64.o qf_moe_4card.o qf_moe_serve.o qf_moe_4card_boot.o
+
+# Everything the four-card stage executor links against (region server, and
+# any host driver of the qf4_stage_* API). reader.o = the checkpoint store.
+STAGE_OBJS := qf_hip4_stage.o qf_nvfp4_wave64.o qf_router_wave64.o \
+              qf_expert_slots.o qf8_gemv.o qf8_gemv_m.o qf8_hc.o qf8_gdn.o \
+              qf8_qsa.o qf8_ple.o qf8_layer.o qf8_moe_fp8.o qf8_moe_i8.o qf8_dense_i8.o qf8_gdn_chunk.o qf_moe_m8_wave64.o reader.o
+# The expert-shard routed-RPC server (QFW_EXPERT_M8) pool.
+M8SRV_OBJS := qf_moe_m8_wave64.o qf_moe_4card.o qf_moe_serve.o qf_moe_4card_boot.o
+
+all: $(OBJS)
+
+# Servers. qf_m8_region_server = alternating map (AMD prefix + head, port 5578);
+# qf_m8_server = expert-shard routed RPC (port 5577).
+servers: qf_m8_region_server qf_m8_server
+
+qf_m8_region_server: qf_m8_region_server.o $(STAGE_OBJS)
+	$(HIPCC) -o $@ $^ -pthread
+qf_m8_server: qf_m8_server.o $(M8SRV_OBJS)
+	$(HIPCC) -o $@ $^ -pthread
+qf_m8_region_server.o: qf_m8_region_server.cpp qf_hip4.h qf_moe_wire.h
+	$(HIPCC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+qf_m8_server.o: qf_m8_server.cpp qf_m8_boot.h qf_moe_wire.h qf_moe_4card.h
+	$(HIPCC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+reader.o: reader.cpp $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+qf_hip4_stage.o: qf_hip4_stage.hip qf_hip4.h qf_nvfp4_wave64.h qf_router_wave64.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c qf_hip4_stage.hip -o $@
+
+qf_nvfp4_wave64.o: qf_nvfp4_wave64.hip qf_nvfp4_wave64.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c qf_nvfp4_wave64.hip -o $@
+
+qf_router_wave64.o: qf_router_wave64.hip qf_router_wave64.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c qf_router_wave64.hip -o $@
+
+# Host code (HIP API for allocs/streams/events); hipcc so the final link
+# pulls in the HIP runtime, same convention as qf_hip4_pipeline.cpp.
+qf_expert_slots.o: qf_expert_slots.cpp qf_nvfp4_wave64.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(CXXFLAGS) -c qf_expert_slots.cpp -o $@
+
+# Compiled with hipcc so the final link pulls in the HIP runtime cleanly;
+# the file itself is pure host C++ (pthreads + the qf4_stage_* API).
+qf_hip4_pipeline.o: qf_hip4_pipeline.cpp qf_hip4.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(CXXFLAGS) -c qf_hip4_pipeline.cpp -o $@
+
+qf8_gemv.o: qf8_gemv.hip qf8_dense.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_hc.o: qf8_hc.hip qf8_dense.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_gdn.o: qf8_gdn.hip qf8_dense.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_moe_i8.o: qf8_moe_i8.hip qf8_moe_i8.h qf_nvfp4_wave64.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_dense_i8.o: qf8_dense_i8.hip qf8_dense_i8.h qf8_dense.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_gdn_chunk.o: qf8_gdn_chunk.hip qf8_dense.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_qsa.o: qf8_qsa.hip qf8_dense.h qf8_dense_i8.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_ple.o: qf8_ple.hip qf8_dense.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_layer.o: qf8_layer.hip qf8_dense.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_gemv_m.o: qf8_gemv_m.hip qf8_dense.h $(ENGINESRC)/qwenflash.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+qf8_moe_fp8.o: qf8_moe_fp8.hip qf8_moe_fp8.h qf8_dense.h
+	$(HIPCC) $(CPPFLAGS) $(HIPFLAGS) -c $< -o $@
+
+# Host-only syntax check: no ROCm, no GPU. Kernels collapse to plain calls.
+check:
+	$(CXX) -DQF_HOST_CHECK $(CPPFLAGS) -fsyntax-only -x c++ qf_hip4_stage.hip
+	$(CXX) -DQF_HOST_CHECK $(CPPFLAGS) -fsyntax-only -x c++ qf_nvfp4_wave64.hip
+	$(CXX) -DQF_HOST_CHECK $(CPPFLAGS) -fsyntax-only -x c++ qf_router_wave64.hip
+	$(CXX) -DQF_HOST_CHECK $(CPPFLAGS) -fsyntax-only qf_expert_slots.cpp
+	$(CXX) $(CPPFLAGS) -fsyntax-only qf_hip4_pipeline.cpp
+	for f in qf8_gemv qf8_gemv_m qf8_hc qf8_gdn qf8_qsa qf8_ple qf8_layer qf8_moe_fp8 qf_moe_m8_wave64; do \
+	  $(CXX) -DQF_HOST_CHECK $(CPPFLAGS) -fsyntax-only -x c++ $$f.hip || exit 1; done
+	for f in qf_m8_region_server qf_m8_server qf_moe_4card qf_moe_serve qf_moe_4card_boot; do \
+	  $(CXX) -DQF_HOST_CHECK $(CPPFLAGS) -fsyntax-only $$f.cpp || exit 1; done
+	@echo "host syntax check OK"
+
+
+# --- M=8 four-card routed-expert tier (AMD side) ---
+qf_moe_m8_wave64.o: qf_moe_m8_wave64.hip qf_moe_m8_wave64.h qf_nvfp4_wave64.h
+	$(HIPCC) $(HIPFLAGS) -c qf_moe_m8_wave64.hip -o $@
+qf_moe_4card.o: qf_moe_4card.cpp qf_moe_4card.h qf_moe_m8_wave64.h
+	$(HIPCC) $(HIPFLAGS) -c qf_moe_4card.cpp -o $@
+qf_moe_serve.o: qf_moe_serve.cpp qf_moe_handoff.h qf_moe_wire.h qf_moe_4card.h
+	$(HIPCC) $(HIPFLAGS) -c qf_moe_serve.cpp -o $@
+qf_moe_4card_boot.o: qf_moe_4card_boot.cpp qf_moe_handoff.h qf_moe_4card.h
+	$(HIPCC) $(HIPFLAGS) -c qf_moe_4card_boot.cpp -o $@
+
+clean:
+	rm -f $(OBJS) reader.o qf_m8_region_server.o qf_m8_server.o qf_m8_region_server qf_m8_server
+
+.PHONY: all check clean servers

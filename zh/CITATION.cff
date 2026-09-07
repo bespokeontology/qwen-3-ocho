@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "如果您使用了本软件或工程报告，请按如下方式引用。"
+title: "Qwen3.8-Flash-Next 异构引擎：双加速器设备上的常驻状态随机计算"
+type: software
+date-released: 2026-09-07
+version: 0.1.0-rc1
+abstract: >-
+  一套双加速器（4x MI50 gfx906 + NVIDIA GB10）异构原生推理设备与 GPU 原生随机评估引擎的
+  工程记录。引擎将语言模型的常驻因果状态视为受条件约束的转移算子：分叉、确定性计数器 RNG、
+  带剪枝与压缩的场推进、加权统计归约、对照解析积分的蒙特卡洛验证、方差缩减、随机渲染，以及
+  模型支撑的受条件随机场。
+keywords:
+  - 异构推理
+  - 随机计算
+  - 蒙特卡洛
+  - 常驻状态
+  - CUDA
+  - HIP
+license: MIT

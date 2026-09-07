@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="Helvetica,Arial,sans-serif">
+  <title>Валидация Монте-Карло</title>
+  <rect x="0" y="0" width="640" height="340" fill="white"/>
+  <g fill="#222" font-size="12">
+    <text x="30" y="30" font-weight="bold" font-size="14">Абсолютная ошибка оценки против аналитики (лог. шкала)</text>
+    <line x1="90" y1="60" x2="90" y2="300" stroke="#555" stroke-width="1.5"/>
+    <line x1="90" y1="300" x2="620" y2="300" stroke="#555" stroke-width="1.5"/>
+    <text x="40" y="304" font-size="10">1e-8</text>
+    <text x="40" y="244" font-size="10">1e-6</text>
+    <text x="40" y="184" font-size="10">1e-4</text>
+    <text x="40" y="124" font-size="10">1e-2</text>
+    <line x1="90" y1="240" x2="620" y2="240" stroke="#ddd"/>
+    <line x1="90" y1="180" x2="620" y2="180" stroke="#ddd"/>
+    <line x1="90" y1="120" x2="620" y2="120" stroke="#ddd"/>
+    <rect x="120" y="32" width="90" height="268" fill="#8a6d3b"/>
+    <text x="165" y="22" text-anchor="middle" font-weight="bold">MC-A</text>
+    <text x="165" y="316" text-anchor="middle" font-size="10">3.4e-4</text>
+    <rect x="240" y="45" width="90" height="255" fill="#8a6d3b"/>
+    <text x="285" y="35" text-anchor="middle" font-weight="bold">MC-A2</text>
+    <text x="285" y="316" text-anchor="middle" font-size="10">5.7e-4</text>
+    <rect x="360" y="68" width="90" height="232" fill="#8a6d3b"/>
+    <text x="405" y="58" text-anchor="middle" font-weight="bold">MC-B</text>
+    <text x="405" y="316" text-anchor="middle" font-size="10">1.4e-3</text>
+    <rect x="480" y="164" width="90" height="136" fill="#3b7a4f"/>
+    <text x="525" y="154" text-anchor="middle" font-weight="bold">MC-A3</text>
+    <text x="525" y="316" text-anchor="middle" font-size="10">1.8e-6</text>
+    <text x="525" y="150" text-anchor="middle" font-size="10" fill="#3b7a4f">стратификация</text>
+    <text x="320" y="334" text-anchor="middle" font-size="10" fill="#555">столбцы: абсолютная ошибка оценки против аналитики; MC-A3 = стратификация S=64 при равном времени (чеки MC_GATES / VARIANCE_REDUCTION)</text>
+  </g>
+</svg>
