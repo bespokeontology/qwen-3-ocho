@@ -86,15 +86,24 @@ through the M-row region path (AMD prefix -> Spark tail -> AMD head).
 - **Ocho Beam**: the eight futures are the output. K=16 field: 5.16 s, 24.8 sibling-tok/s.
   K=1500 beams (C++/Rust tasks): ~850 s each, ~14 sibling-tok/s; temperature-1.0 rows accumulate
   tail-vocabulary artifacts over long horizons while the greedy row stays clean.
+- **Branch memory (PoC)**: losing branches contribute one classified proposition per round
+  (constraint/failure/unresolved question), injected into the committed champion as a bounded
+  [OCHO BRANCH MEMORY] block via the resident refill path; losing KV is never merged.
 - **Ocho Loop**: render -> evaluate -> choose -> commit -> continue. Evaluation is simple and
   fully logged (early-EOS and artifact-token penalties, then consensus distance on the
   recurrent-state signature). The chosen row's full state is committed back to the parent slot on
   both boxes. Capability run: K=48 x 16 iterations = 768 committed tokens of continuous design
   reasoning, ~24 s per cycle, clean exit; same-boot field-identity gate bit-identical.
 
+A second capability trace on the Rust DAG-scheduler task (FREEZE_OCHO_RUST_LOOP_20260907) runs the
+same 16-cycle structure with the chooser switching among six rows. The restricted-candidate sampler
+(receipt SAMPLER_TOPK_RECEIPT_20260907) is retained: 311.9 ms/step (was 324.6 full-vocab), row 0's
+full-vocabulary argmax bit-identical, and the observed tail-vocabulary text corruption eliminated.
+
 Full mechanism, measured behavior, repairs, and limitations: docs/QWEN_3_OCHO.md. Frozen
-capability artifacts: FREEZE_OCHO_20260907 and FREEZE_OCHO_CAPABILITY_20260907 (in the canonical
-freeze package tree; SHA256-verified).
+capability artifacts: FREEZE_OCHO_20260907, FREEZE_OCHO_CAPABILITY_20260907,
+FREEZE_OCHO_RUST_LOOP_20260907, FREEZE_OCHO_TOPKSAMPLER_20260907 (canonical freeze package tree;
+SHA256-verified).
 
 ## 6. Stochastic compute engine
 

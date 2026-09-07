@@ -76,13 +76,20 @@ Spark 尾部 -> AMD 头部）同步推进。
 
 - **Ocho Beam**：八条未来即输出。K=16 字段：5.16 s，24.8 sibling-tok/s。K=1500 Beam（C++/Rust
   任务）：各约 850 s、约 14 sibling-tok/s；长视野下温度 1.0 行累积尾部词表伪影，贪婪行保持干净。
+- **分支记忆（概念验证）**：落选分支每轮贡献一条分类命题（约束/失败/未决问题），以有界的
+  [OCHO BRANCH MEMORY] 块经常驻再填充路径注入已提交的冠军；落选 KV 绝不合并。
 - **Ocho Loop**：渲染 -> 评估 -> 选择 -> 提交 -> 继续。评估简单且全程留痕（早停与伪影 token
   罚项，然后是循环状态签名上的共识距离）。所选行的完整状态在两侧提交回父槽位。能力运行：
   K=48 x 16 轮 = 768 个提交 token 的连续设计推理，每轮约 24 s，干净退出；同进程字段同一性门
   逐位一致。
 
-完整机制、实测行为、修复与局限：docs/QWEN_3_OCHO.md。冻结能力产物：FREEZE_OCHO_20260907 与
-FREEZE_OCHO_CAPABILITY_20260907（位于规范冻结包树中；已 SHA256 校验）。
+Rust DAG 调度任务上的第二份能力轨迹（FREEZE_OCHO_RUST_LOOP_20260907）以同样的 16 轮结构运行，
+选择器在六行间切换。受限候选采样器（收据 SAMPLER_TOPK_RECEIPT_20260907）已保留：311.9 ms/步
+（全词表时为 324.6），第 0 行全词表 argmax 逐位一致，实测的尾部词表文本污染被消除。
+
+完整机制、实测行为、修复与局限：docs/QWEN_3_OCHO.md。冻结能力产物：FREEZE_OCHO_20260907、
+FREEZE_OCHO_CAPABILITY_20260907、FREEZE_OCHO_RUST_LOOP_20260907、FREEZE_OCHO_TOPKSAMPLER_20260907
+（规范冻结包树；已 SHA256 校验）。
 
 ## 6. 随机计算引擎
 
