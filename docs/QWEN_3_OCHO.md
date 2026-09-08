@@ -107,8 +107,7 @@ by DFS, AtomicBool cancellation).
 - M=8 is the validated fork width; the M=16 state path needs its own correctness round.
 - QF_HEAD_TEMP and QF_HEAD_SEED are read once at server boot: one seed per boot.
 - Measured on a Spark node at a ~220 W power ceiling with a known instability history
-  (drivetrain-deficit failure mode); an Atlas 300I replacement is planned and is expected to
-  be better suited to this workload. Timings should be read as node-specific.
+  (drivetrain-deficit failure mode). Timings should be read as node-specific.
 
 ## 6. Frozen artifacts
 
