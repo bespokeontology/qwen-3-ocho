@@ -241,6 +241,16 @@ copies of the canonical receipts (private originals are in the canonical freeze 
 `ocho/` — Qwen 3.ocho capability sources: the Spark engine tree (CUDA) and the AMD region server
 tree (HIP/ROCm), sanitized, plus the loop client patch.
 
-## 14. Citation and license
+## 14. Related engines
+
+Other engines by the same author:
+
+- [openPangu-2.0-Flash-CUDA-ROCm](https://github.com/bespokeontology/openPangu-2.0-Flash-CUDA-ROCm) -
+  native CUDA and HIP/ROCm backends for openPangu-2.0-Flash on NVIDIA GB10 and 4x AMD MI50.
+- [qwen3.8-27b-mi50-cpp-engine](https://github.com/bespokeontology/qwen3.8-27b-mi50-cpp-engine) -
+  a native C++/HIP engine for Qwen3.8-27B on 4x AMD MI50 (gfx906), with chained MTP
+  speculative decoding and no Python in the execution path.
+
+## 15. Citation and license
 
 See `CITATION.cff`. License text in `LICENSE`. Published: https://github.com/bespokeontology/qwen-3-ocho
